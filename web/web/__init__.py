@@ -1,9 +1,9 @@
 import sys
 import re
 from pyramid.config import Configurator
-import xmlrpclib
-import tokenize_en as vva_tokenizer
-from detokenize import Detokenizer as MTMDetokenizer
+import xmlrpc.client
+from . import tokenize_en as vva_tokenizer
+from .detokenize import Detokenizer as MTMDetokenizer
 
 
 # Module global Moses server instance - initialized in main() and used in translate().
@@ -174,5 +174,5 @@ def main(global_config, **settings):
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.scan()
-    MOSES_SERVER = xmlrpclib.ServerProxy(settings['moses_server'])
+    MOSES_SERVER = xmlrpc.client.ServerProxy(settings['moses_server'])
     return config.make_wsgi_app()
