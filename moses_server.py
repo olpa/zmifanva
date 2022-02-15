@@ -1,6 +1,6 @@
 from subprocess import Popen, PIPE
-from SimpleXMLRPCServer import SimpleXMLRPCServer
-from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
+from xmlrpc.server import SimpleXMLRPCServer
+from xmlrpc.server import SimpleXMLRPCRequestHandler
 
 
 class MosesTranslator(object):
@@ -39,8 +39,8 @@ def initialize_xmlrpc_server(func_list):
 
 
 def main():
-    moses_jb2en = MosesTranslator(['mosesdecoder/bin/moses', '-f', 'train.jb-en/model/moses.ini'])
-    moses_en2jb = MosesTranslator(['mosesdecoder/bin/moses', '-f', 'train.en-jb/model/moses.ini'])
+    moses_jb2en = MosesTranslator(['/opt/moses/bin/moses', '-f', '/build/zmifanva/train.jb-en/model/moses.ini'])
+    moses_en2jb = MosesTranslator(['/opt/moses/bin/moses', '-f', '/build/zmifanva/train.en-jb/model/moses.ini'])
     initialize_xmlrpc_server([(moses_jb2en.translate, 'translate_jb2en'),
                               (moses_en2jb.translate, 'translate_en2jb')])
 
