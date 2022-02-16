@@ -10,11 +10,15 @@ def home_view(request):
         # Home page
         return {'dir': '',
                 'src': '',
-                'tgt': ''}
+                'tgt': '',
+                'error': '',
+                }
     else:
         # Translate
-        tgt = translate(request.params['src'], request.params['dir'])
+        translated = translate(request.params['src'], request.params['dir'])
 
         return {'dir': request.params['dir'],
                 'src': request.params['src'],
-                'tgt': tgt}
+                'tgt': translated.get('tgt'),
+                'error': translated.get('error'),
+                }

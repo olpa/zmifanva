@@ -148,10 +148,10 @@ def translate(src, direction):
         try:
             tgt = MOSES_SERVER.translate_jb2en(src)
         except Exception as e:
-            return ''
+            return { 'tgt': '', 'error': 'Error calling moses: ' + str(e) }
         tgt = unescape_html_entities(tgt)
         tgt = detokenize_en(tgt)
-        return tgt
+        return { 'tgt': tgt }
     elif direction == 'en2jb':
         # English to Lojban translation
         src = ' '.join(tokenize_en(src))
@@ -159,9 +159,9 @@ def translate(src, direction):
         try:
             tgt = MOSES_SERVER.translate_en2jb(src)
         except Exception as e:
-            return ''
+            return { 'tgt': '', 'error': 'Error calling moses: ' + str(e) }
         tgt = unescape_html_entities(tgt)
-        return tgt
+        return { 'tgt': tgt }
     else:
         assert False
 
