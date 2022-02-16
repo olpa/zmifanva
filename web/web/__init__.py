@@ -1,3 +1,4 @@
+import os
 import sys
 import re
 from pyramid.config import Configurator
@@ -7,7 +8,8 @@ from .detokenize import Detokenizer as MTMDetokenizer
 
 
 # Module global Moses server instance - initialized in main() and used in translate().
-MOSES_SERVER = None
+MOSES_SERVER_JB2EN = None
+MOSES_SERVER_EN2JB = None
 MTMDetok = MTMDetokenizer()
 
 # Maximum length of input source text.
@@ -146,7 +148,8 @@ def translate(src, direction):
         # Lojban to English translation
         src = ' '.join(tokenize_jb(src))
         try:
-            tgt = MOSES_SERVER.translate_jb2en(src)
+            tr = MOSES_SERVER_JB2EN.translate({'text': src})
+            tgt = tr['text']
         except Exception as e:
             return { 'tgt': '', 'error': 'Error calling moses: ' + str(e) }
         tgt = unescape_html_entities(tgt)
@@ -157,7 +160,8 @@ def translate(src, direction):
         src = ' '.join(tokenize_en(src))
         src = escape_html_entities(src)
         try:
-            tgt = MOSES_SERVER.translate_en2jb(src)
+            tr = MOSES_SERVER_EN2JB.translate({'text': src})
+            tgt = tr['text']
         except Exception as e:
             return { 'tgt': '', 'error': 'Error calling moses: ' + str(e) }
         tgt = unescape_html_entities(tgt)
@@ -167,12 +171,16 @@ def translate(src, direction):
 
 
 def main(global_config, **settings):
-    global MOSES_SERVER
+    global MOSES_SERVER_JB2EN
+    global MOSES_SERVER_EN2JB
     """This function returns a Pyramid WSGI application."""
     config = Configurator(settings=settings)
     config.include('pyramid_chameleon')
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.scan()
-    MOSES_SERVER = xmlrpc.client.ServerProxy(settings['moses_server'])
+    jb2en_endpoint = os.path.expandvars(settings['moses_server_jb2en'])
+    en2jb_endpoint = os.path.expandvars(settings['moses_server_en2jb'])
+    MOSES_SERVER_JB2EN = xmlrpc.client.ServerProxy(jb2en_endpoint)
+    MOSES_SERVER_EN2JB = xmlrpc.client.ServerProxy(en2jb_endpoint)
     return config.make_wsgi_app()
