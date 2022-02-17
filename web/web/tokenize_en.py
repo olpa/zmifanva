@@ -773,7 +773,7 @@ def split(string, tags=False, citations=False, replace=unicode_replacements, ign
         The replace dictionary contains (unicode) strings to normalize.
     """
     # Make sure we have a unicode string.
-    if isinstance(string, str):
+    if hasattr(string, 'decode'):
         string = string.decode("utf-8")
     for k,v in replace.items():
         for k in k:
