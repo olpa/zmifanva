@@ -88,7 +88,7 @@ def tokenize_en(text):
     Returns:
         list of tokenized words (strings)
     """
-    return vva_tokenizer.split2(text)[0].split(' ')
+    return vva_tokenizer.split(text)[0].split(' ')
 
 
 def detokenize_en(text):
