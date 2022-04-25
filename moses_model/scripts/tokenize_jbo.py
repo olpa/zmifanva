@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Script to tokenize and normalize Lojban text.
 """
@@ -24,7 +26,8 @@ def main():
     """Main function"""
     for line in sys.stdin:
         tokens = tokenize(line.rstrip())
-        print ' '.join(tokens)
+        print(' '.join(tokens))
+
 
 if __name__ == '__main__':
     main()

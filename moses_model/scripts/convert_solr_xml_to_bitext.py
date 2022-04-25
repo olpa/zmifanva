@@ -34,7 +34,8 @@ def iterate_bitext(add_root_node):
 def main():
     """Main function"""
     if len(sys.argv) == 1:
-        print "Usage: python convert_solr_xml_to_bitext.py [XML filename] > output text filename"
+        print("Usage: python convert_solr_xml_to_bitext.py "
+              "[XML filename] > output text filename")
         sys.exit(1)
 
     for filename in sys.argv[1:]:
@@ -42,7 +43,7 @@ def main():
         root = tree.getroot()
 
         for jbo_t, eng_t in iterate_bitext(root):
-            print '%s\t%s' % (jbo_t, eng_t)
+            print('%s\t%s' % (jbo_t, eng_t))
 
 
 if __name__ == '__main__':
